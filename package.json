@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.0",
     "electron": "^4.0.2",
+    "is-electron": "^2.2.0",
     "node-cmd": "^3.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
