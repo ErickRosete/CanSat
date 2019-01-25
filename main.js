@@ -7,7 +7,7 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800, 
+        width: 1000, 
         height: 600,
         webPreferences: {
           nodeIntegration: false,
@@ -37,9 +37,9 @@ ipcMain.on("code:submit",(event,informacion)=>{
     console.log("logging info")
     console.log(informacion);
     var ubicacion_cli = __dirname+"\\cli\\arduino-cli.exe"
-    var puerto = "COM8"
+    var puerto = "COM4"
     var board = "arduino:avr:uno"
-    var ubicacion_arduino = "D:\\Program Files (x86)\\Arduino\\Arduino_debug.exe"
+    var ubicacion_arduino = "C:\\Program Files (x86)\\Arduino\\Arduino_debug.exe"
 
     if(informacion=="Primero"){
         var command= '"' + ubicacion_cli + '" --format json board list'

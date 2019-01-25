@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-// botonmenu
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Paper from '@material-ui/core/Paper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Popper from '@material-ui/core/Popper';
-import Grow from '@material-ui/core/Grow';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-
 
 // npm install --save is-electron
 // HemalR had the solution  
@@ -22,80 +10,86 @@ import Menu from '@material-ui/core/Menu';
 // https://github.com/csepulv/electron-with-create-react-app/blob/electron-remote/src/App.jshttps://github.com/csepulv/electron-with-create-react-app/blob/electron-remote/src/App.js
 import isElectron from 'is-electron';
 
+import DragAndDrop from '../../components/Home/DragAndDrop/DragAndDrop';
+import PortMenu from '../../components/Home/PortMenu/PortMenu';
+import SmallPortMenu from '../../components/Home/PortMenu/SmallPortMenu';
 
-  
+import "./Home.css";
 
-
+// menu
+// state = {
+//     open: false,
+// };
 class HomePage extends Component {
-    // menu
-    // state = {
-    //     open: false,
-    // };
     state = {
         anchorEl: null,
         selectedIndex: 1,
-      };
-    thirdOption="COMZ"
+        openPortMenu: false,
+        anchorSmallEl: null,
+    };
 
-    options = [
-        'Seleccionar un puerto',
-        'COMX',
-        'COMY',
-        this.thirdOption,
-    ];
+    //PortMenu
+    clickListItemHandler = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    clickMenuItemHandler = index => {
+        this.setState({
+            selectedIndex: index,
+            anchorEl: null
+        });
+    };
+
+    closeListItemHandler = () => {
+        this.setState({ anchorEl: null });
+    };
+
+    //Small Port Menu
+    smallPortMenuToggleHandler = (event) => {
+        this.setState({ anchorSmallEl: event.currentTarget });
+    };
+
+    smallPortMenuCloseHandler = () => {
+        this.setState({ anchorSmallEl: null });
+    };
 
 
-    handleClick2=(e)=>{
+    //Buttons
+    handleClick2 = (e) => {
         e.preventDefault();
         console.log('El segundo boton fue seleccionado.');
         if (isElectron()) {
             console.log(window.ipcRenderer);
-            window.ipcRenderer.send('code:submit','Segundo')
+            window.ipcRenderer.send('code:submit', 'Segundo')
         }
     }
 
-    handleClick3=(e)=>{
+    handleClick3 = (e) => {
         e.preventDefault();
         console.log('El segundo boton fue seleccionado.');
         if (isElectron()) {
             console.log(window.ipcRenderer);
-            window.ipcRenderer.send('code:submit','Tercero')
+            window.ipcRenderer.send('code:submit', 'Tercero')
         }
     }
 
-    closeClick=(e)=>{
+    closeClick = (e) => {
         e.preventDefault();
         console.log('El boton de cierre fue seleccionado.');
         if (isElectron()) {
-            window.ipcRenderer.send('code:submit','Cerrando')
-             // const { app } = window.require('electron').remote;
+            window.ipcRenderer.send('code:submit', 'Cerrando')
+            // const { app } = window.require('electron').remote;
             console.log(window.app.quit())
         }
     }
 
-    handleClickListItem = event => {
-        this.setState({ anchorEl: event.currentTarget });
-      };
-    
-      handleMenuItemClick = (event, index) => {
-        this.setState({ selectedIndex: index, anchorEl: null });
-      };
-    
-      handleClose = () => {
-        this.setState({ anchorEl: null });
-      };
-
-
-
     render() {
         const { classes } = this.props;
         // const { open } = this.state;
-        const { anchorEl } = this.state;
-
 
         window.ipcRenderer.on("code:feedback", (event, arg) => {
             console.log(arg);
-            this.thirdOption=arg;
+            this.thirdOption = arg;
             // this.setState({ options: options });
             console.log(this.options)
 
@@ -106,59 +100,44 @@ class HomePage extends Component {
             console.log('El primer boton fue seleccionado.');
             if (isElectron()) {
                 console.log(window.ipcRenderer);
-                window.ipcRenderer.send('code:submit','Primero');
-                // window.ipcRenderer.on('pong', (event, arg) => {
-                //     this.setState({ipc: true})
-                // })
-                // ipcRenderer.send('code:submit', "primero")
-                // const { app } = window.require('electron').remote;
-                // for app.quit()
+                window.ipcRenderer.send('code:submit', 'Primero');
             }
         }
+        // window.ipcRenderer.on('pong', (event, arg) => {
+        //     this.setState({ipc: true})
+        // })
+        // ipcRenderer.send('code:submit', "primero")
+        // const { app } = window.require('electron').remote;
+        // for app.quit()
 
-        console.log("Soy una aplicacion de Electron?: "+isElectron());
+        console.log("Soy una aplicacion de Electron?: " + isElectron());
         return (
             <div className="HomePage">
-                <Button variant="contained" color="primary" className={classes.button} onClick={handleClick1}>
-                    Escaneo arduino </Button>
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleClick2}>
-                    LED Rapido </Button>
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleClick3}>
-                    LED Lento </Button>
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.closeClick}>
-                    Close </Button>
-                <List component="nav">
-                    <ListItem
-                        button
-                        aria-haspopup="true"
-                        aria-controls="lock-menu"
-                        aria-label="When device is locked"
-                        onClick={this.handleClickListItem}
-                    >
-                        <ListItemText
-                        primary="Puerto"
-                        secondary={this.options[this.state.selectedIndex]}
-                        />
-                    </ListItem>
-                    </List>
-                    <Menu
-                    id="lock-menu"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={this.handleClose}
-                    >
-                    {this.options.map((option, index) => (
-                        <MenuItem
-                        key={option}
-                        disabled={index === 0}
-                        selected={index === this.state.selectedIndex}
-                        onClick={event => this.handleMenuItemClick(event, index)}
-                        >
-                        {option}
-                        </MenuItem>
-                    ))}
-                    </Menu>
+                <PortMenu onClose={this.closeListItemHandler}
+                    onClickList={this.clickListItemHandler}
+                    onClickMenu={this.clickMenuItemHandler}
+                    anchorEl={this.state.anchorEl}
+                    selectedIndex={this.state.selectedIndex}>
+                </PortMenu>
 
+                <div className="action-bar">
+                    <Button variant="contained" color="primary" className={classes.button} onClick={handleClick1}>
+                        Escaneo arduino </Button>
+                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleClick2}>
+                        LED Rapido </Button>
+                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleClick3}>
+                        LED Lento </Button>
+                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.closeClick}>
+                        Close </Button>
+
+                    <SmallPortMenu
+                        onClose={this.smallPortMenuCloseHandler}
+                        onClickMenu={this.smallPortMenuToggleHandler}
+                        anchorEl={this.state.anchorSmallEl}>
+                    </SmallPortMenu>
+                </div>
+
+                <DragAndDrop></DragAndDrop>
             </div>
         );
     }

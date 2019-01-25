@@ -1,0 +1,40 @@
+.dnd-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+}
+
+.options-container, .target-container {
+    display: flex;
+    margin: 1rem;
+    text-align: center;
+}
+
+.item, .target {
+    border: 1px solid grey;
+    width: 10rem;
+    max-width: 70%;
+    margin: 1rem;
+}
+
+.target {
+    color: #eeeeee
+}
+
+.target-container .target {
+    min-height: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.target .item {
+    margin: 0.5rem;
+    color: black;
+}
+
+.options-container .item {
+    padding: 1rem;
+}
